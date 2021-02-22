@@ -19,6 +19,7 @@ module SDL.Raw.Helper (liftF) where
 import Control.Monad           (replicateM)
 import Control.Monad.IO.Class  (MonadIO, liftIO)
 import Language.Haskell.TH
+import qualified Language.Haskell.TH.Datatype.TyVarBndr (plainTV)
 
 -- | Given a name @fname@, a name of a C function @cname@ and the desired
 -- Haskell type @ftype@, this function generates:
@@ -80,7 +81,7 @@ liftType = \case
     m <- newName "m"
     return $
       ForallT
-        [PlainTV m]
+        [Language.Haskell.TH.Datatype.TyVarBndr.plainTV m]
         [AppT (ConT ''MonadIO) $ VarT m]
         (AppT (VarT m) t)
   t -> return t
